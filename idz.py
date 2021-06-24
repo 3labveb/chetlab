@@ -35,7 +35,8 @@ class ListClass(Resource):
     @name_space1.marshal_with(list_)
     def get(self):
         """Получение всего хранимого массива"""
-        return {'array': ls}
+        global ls
+        return ls
     @name_space1.doc("")
     # ожидаем на входе данных в соответствии с моделью list_
     @name_space1.expect(list_)
