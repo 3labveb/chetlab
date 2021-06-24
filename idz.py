@@ -24,7 +24,7 @@ list_ = api.model('list', {
 })
 
 # массив, который хранится в оперативной памяти
-ls=[{"code": 35463, "store":"Yarche", "manufacturer":"Baltor", "price":456, "suitability":21}, {"code": 354232, "store":"Maria", "manufacturer":"Hurha", "price":473, "suitability":15}]
+ls=[{"code": 35463, "store":"Yarche", "manufacturer":"Baltor", "price":456, "suitability":21}]
 universalID=int(0)
 allarray = ls
 name_space1 = api.namespace('list', description='list APIs')
@@ -46,7 +46,7 @@ class ListClass(Resource):
         global allarray
         # получить переданный массив из тела запроса
         
-        sick={"code":api.payload['code'], "store": api.payload['story'], "manufacturer": api.payload['manufacturer'], "price": api.payload['price'], "suitability": api.payload['suitability']} 
+        sick={"code":api.payload['code'], "store": api.payload['store'], "manufacturer": api.payload['manufacturer'], "price": api.payload['price'], "suitability": api.payload['suitability']} 
 
         ls.append(sick)
         # возвратить новый созданный массив клиенту
@@ -198,7 +198,7 @@ class chahgePriceClass(Resource):
         """Удаление товара по коду"""
         global ls
         args = reqp.parse_args()
-        ls=[sick for sick in ls if sick['code']!=args['xode']]
+        ls=[sick for sick in ls if sick['code']!=args['code']]
         return { 'array': ls}
     @name_space1.doc("")
     # ожидаем на входе данных в соответствии с моделью list_
