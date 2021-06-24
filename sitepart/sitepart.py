@@ -39,9 +39,9 @@ def colors(palette):
  }
  # что возвратить если url all
  if palette == 'all':
- result = all_colors
+  result = all_colors
  else:
  # возврат в зависимости от имени палитры
- result = {palette: all_colors.get(palette)}
+  result = {palette: all_colors.get(palette)}
  # преобразуем словарь в json строку и возвращаем ее
  return jsonify(result)
