@@ -15,10 +15,10 @@ from flask_restplus import fields
 # определение модели данных массива
 list_ = api.model('list', {
     'code': fields.Integer(required=True, description='product code'),
-    'store': fields.String(required=True, description='Store),
+    'store': fields.String(required=True, description='store'),
     'manufacturer': fields.String(required=True, description='manufacturer of product'),
     'price': fields.Integer(required=True, description='the price of thr product'),
-    #через сколько закончиться срок годности
+    #через сколько дней закончиться срок годности
     'suitability': fields.Integer(required=True, description='time to expiration date'), 
     'arr': fields.List(fields.Raw,required=True, description='all list'),
 })
@@ -56,12 +56,12 @@ class ListClass(Resource):
 sortsc = api.model('lst', { 'array':fields.List(fields.Raw,required=True, description='all list')})
 # url 127.0.0.1/list/mimmax
 @name_space1.route("/getsortCode")
-class getsortId(Resource):
+class getsortCode(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(sortsc)
     def get(self):
-        """Получение сортировки по id"""
+        """Получение сортировки по коду"""
         global ls
         cod=sorted(ls,key=lambda sick: sick['code'])
         return {'array': cod}
@@ -113,72 +113,72 @@ class getsortSuitability(Resource):
 oneval=api.model('one', {'val':fields.String}, required=True, description='one values')
 
 #MAX
-@name_space1.route("/getmaxDead")
-class getmaxDead(Resource):
+@name_space1.route("/getmaxSuitability")
+class getmaxSuitability(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(oneval)
     def get(self):
-        """Получение максимального по умершим"""
+        """Получение максимального по времени до истечения срока годности"""
         global ls
-        mx=max([sick['dead'] for sick in ls ])
+        mx=max([sick['suitability'] for sick in ls ])
         return {'val': mx}
 
-@name_space1.route("/getmaxRecovered")
-class getmaxRecovered(Resource):
+@name_space1.route("/getmaxPrice)
+class getmaxPrice(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(oneval)
     def get(self):
-        """Получение максимального по выздоровевшим"""
+        """Получение максимального по цене"""
         global ls
-        mx=max([sick['recovered'] for sick in ls ])
+        mx=max([sick['price'] for sick in ls ])
         return {'val': mx}
 
 #AVERAGE
-@name_space1.route("/getaverDead")
-class getaverDead(Resource):
+@name_space1.route("/getaverSuitability")
+class getaverSuitability(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(oneval)
     def get(self):
-        """Получение среднего по умершим"""
+        """Получение среднего по времени до истечения срока годности"""
         global ls
-        aver=sum([sick['dead'] for sick in ls ])/len(ls)
+        aver=sum([sick['suitability'] for sick in ls ])/len(ls)
         return {'val': aver}
 
-@name_space1.route("/getaverRecovered")
-class getaverRecovered(Resource):
+@name_space1.route("/getaverPrice")
+class getaverPrice(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(oneval)
     def get(self):
-        """Получение среднего по выздоровевшим"""
+        """Получение среднего по цене"""
         global ls
-        aver=sum([sick['recovered'] for sick in ls ])/len(ls)
+        aver=sum([sick['price'] for sick in ls ])/len(ls)
         return {'val': aver}
 
 #MIN
-@name_space1.route("/getminDead")
-class getminDead(Resource):
+@name_space1.route("/getminSuitability")
+class getminSuitability(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(oneval)
     def get(self):
-        """Получение минимального по умершим"""
+        """Получение минимального по времени до истечения срока годности"""
         global ls
-        mn=min([sick['dead'] for sick in ls ])
+        mn=min([sick['suitability'] for sick in ls ])
         return {'val': mn}
 
-@name_space1.route("/getminRecovered")
-class getminRecovered(Resource):
+@name_space1.route("/getminPrice")
+class getminPrice(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(oneval)
     def get(self):
-        """Получение минимального по выздоровевшим"""
+        """Получение минимального по цене"""
         global ls
-        mn=min([sick['recovered'] for sick in ls ])
+        mn=min([sick['price'] for sick in ls ])
         return {'val': mn}
     
 api.add_namespace(name_space1)
@@ -187,19 +187,19 @@ from flask_restplus import reqparse
 from random import random
 
 reqp = reqparse.RequestParser()
-reqp.add_argument('id', type=int, required=False)
+reqp.add_argument('code', type=int, required=False)
 
-@name_space1.route("/chahgeDisease")
-class chahgeDiseaseClass(Resource):
+@name_space1.route("/chahgePrice")
+class chahgePriceClass(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью reqp
     @name_space1.expect(reqp)
     @name_space1.marshal_with(list_)
     def get(self):
-        """Удаление заболевания по id"""
+        """Удаление товара по коду"""
         global ls
         args = reqp.parse_args()
-        ls=[sick for sick in ls if sick['id']!=args['id']]
+        ls=[sick for sick in ls if sick['code']!=args['xode']]
         return { 'array': ls}
     @name_space1.doc("")
     # ожидаем на входе данных в соответствии с моделью list_
@@ -207,17 +207,17 @@ class chahgeDiseaseClass(Resource):
     # маршалинг данных в соответствии с list_
     @name_space1.marshal_with(list_)
     def post(self):
-        """Изменение заболевания по id"""
+        """Изменение товара по коду"""
         global ls
         for sick in ls:
-          if(api.payload['id'] == sick["id"]):
-                sick["disease"] = api.payload['disease']
-                sick["country"] = api.payload['country']
-                sick["recovered"] = api.payload['recovered']
-                sick["dead"] = api.payload['dead']
+          if(api.payload['code'] == sick["code"]):
+                sick["store"] = api.payload['store']
+                sick["manufacturer"] = api.payload['manufacturer']
+                sick["price"] = api.payload['price']
+                sick["suitability"] = api.payload['suitability']
                 return { 'array': ls}
         
-        sick={"id":api.payload['id'], "disease": api.payload['disease'], "country": api.payload['country'], "recovered": api.payload['recovered'], "dead": api.payload['dead'] } 
+        sick={"code":api.payload['code'], "store": api.payload['store'], "manufacturer": api.payload['manufacturer'], "price": api.payload['price'], "suitability": api.payload['suitability'] } 
         ls.append(sick)
         return ls
 app.run(debug=True,host='127.0.0.1',port=5000)   
