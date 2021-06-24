@@ -24,7 +24,7 @@ list_ = api.model('list', {
 })
 
 # массив, который хранится в оперативной памяти
-ls=[{"code": 35463, "store":"Yarche", "manufacturer":"Baltor", "price":456, "suitability":21}]
+ls=[{"code": 35463, "store":"Yarche", "manufacturer":"Baltor", "price":456, "suitability":21}, {"code": 354232, "store":"Maria", "manufacturer":"Hurha", "price":473, "suitability":15}]
 universalID=int(0)
 allarray = ls
 name_space1 = api.namespace('list', description='list APIs')
