@@ -1,47 +1,31 @@
-from flask import Blueprint,jsonify
-# Создаем Blueprint для отдельной части веб api
-sitepart = Blueprint("sitepart", __name__, template_folder='templates',static_folder='static')
-# Возвращает цветовую палитру по имени палитры (rgb, cmyk ...)
-@sitepart.route('/colors/<palette>/')
-def colors(palette):
- """Example endpoint returning a list of colors by palette
- This is using docstrings for specifications.
- ---
- parameters:
- - name: palette
- in: path
- type: string
- enum: ['all', 'rgb', 'cmyk']
- required: true
- default: all
- definitions:
- Palette:
- type: object
- properties:
- palette_name:
- type: array
- items:
- $ref: '#/definitions/Color'
- Color:
- type: string
- responses:
- 200:
- description: A list of colors (may be filtered by palette)
- schema:
- $ref: '#/definitions/Palette'
- examples:
- rgb: ['red', 'green', 'blue']
- """
- # содержимое цветов палитр
- all_colors = {
- 'cmyk': ['cian', 'magenta', 'yellow', 'black'],
- 'rgb': ['red', 'green', 'blue']
- }
- # что возвратить если url all
- if palette == 'all':
-  result = all_colors
- else:
- # возврат в зависимости от имени палитры
-  result = {palette: all_colors.get(palette)}
- # преобразуем словарь в json строку и возвращаем ее
- return jsonify(result)
+from flask_restplus import Namespace, Resource, fields
+api = Namespace('part', description='some information')
+# описание возвращаемых полей
+info = api.model('part', {
+    'id': fields.String(required=True, description='The identifier'),
+    'name': fields.String(required=True, description='The name'),
+})
+INFO = [
+    {'id': '1111', 'name': 'Alex'},
+]
+@api.route('/')
+class InfoList(Resource):
+    @api.marshal_list_with(info)
+    def get(self):
+        '''List all / это описание появится в браузере на экране напротив get'''
+        return INFO
+# URL вида http://127.0.0.1:5000/part/1111 http://127.0.0.1:5000/part/2.
+@api.route('/<int:id>')
+@api.param('id', 'The identifier')
+@api.response(404, 'id not found')
+class InfoId(Resource):
+    @api.doc(params={'id': 'An ID'}) # описание id в документации по адресу 127.0.0.1
+    @api.marshal_with(info)
+    def get(self, id):
+        for idi in INFO:
+            if idi['id'] == id:
+               return idi
+            else:
+                return {'id': id, 'name': 'your name'},
+            api.abort(404)
+ 
