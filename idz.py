@@ -10,24 +10,21 @@ class MainClass(Resource):
         return {"status": "Got new data"}
     def post(self):
         return {"status": "Posted new data"}
-    def patch(self):
-        return {"status": "Patched new data"}
-    def put(self):
-        return {"status": "Put new data"}
 
 from flask_restplus import fields
 # определение модели данных массива
 list_ = api.model('list', {
-    'id': fields.Integer(required=True, description='disease id'),
-    'disease': fields.String(required=True, description='disease'),
-    'country': fields.String(required=True, description='country'),
-    'recovered': fields.Integer(required=True, description='number of recovered'),
-    'dead': fields.Integer(required=True, description='number of deaths'), 
+    'code': fields.Integer(required=True, description='product code'),
+    'store': fields.String(required=True, description='Store),
+    'manufacturer': fields.String(required=True, description='manufacturer of product'),
+    'price': fields.Integer(required=True, description='the price of thr product'),
+    #через сколько закончиться срок годности
+    'suitability': fields.Integer(required=True, description='time to expiration date'), 
     'arr': fields.List(fields.Raw,required=True, description='all list'),
 })
 
 # массив, который хранится в оперативной памяти
-ls=[{"id": 0, "disease":"COVID-19", "country":"China", "recovered":100, "dead":3}]
+ls=[{"code": 35463, "store":"Yarche", "manufacturer":"Baltor", "price":456, "suitability":21}]
 universalID=int(0)
 allarray = ls
 name_space1 = api.namespace('list', description='list APIs')
@@ -50,7 +47,7 @@ class ListClass(Resource):
         global allarray
         # получить переданный массив из тела запроса
         
-        sick={"id":api.payload['id'], "disease": api.payload['disease'], "country": api.payload['country'], "recovered": api.payload['recovered'], "dead": api.payload['dead']} 
+        sick={"code":api.payload['code'], "store": api.payload['story'], "manufacturer": api.payload['manufacturer'], "price": api.payload['price'], "suitability": api.payload['suitability']} 
 
         ls.append(sick)
         # возвратить новый созданный массив клиенту
@@ -58,51 +55,7 @@ class ListClass(Resource):
 # модель данные с двумя параметрами строкового типа
 sortsc = api.model('lst', { 'array':fields.List(fields.Raw,required=True, description='all list')})
 # url 127.0.0.1/list/mimmax
-@name_space1.route("/getsortDisease")
-class getsortDisease(Resource):
-    @name_space1.doc("")
-    # маршаллинг данных в соответствии с моделью minmax
-    @name_space1.marshal_with(sortsc)
-    def get(self):
-        """Получение сортировки по заболеванию"""
-        global ls
-        dis=sorted(ls,key=lambda sick: sick['disease'])
-        return {'array': dis}
-
-@name_space1.route("/getsortCountry")
-class getsortCountry(Resource):
-    @name_space1.doc("")
-    # маршаллинг данных в соответствии с моделью minmax
-    @name_space1.marshal_with(sortsc)
-    def get(self):
-        """Получение сортировки по странам"""
-        global ls
-        cou=sorted(ls,key=lambda sick: sick['country'])
-        return {'array': cou}
-
-@name_space1.route("/getsortRecovered")
-class getsortRecovered(Resource):
-    @name_space1.doc("")
-    # маршаллинг данных в соответствии с моделью minmax
-    @name_space1.marshal_with(sortsc)
-    def get(self):
-        """Получение сортировки по выздоровевшим"""
-        global ls
-        rec=sorted(ls,key=lambda sick: sick['recovered'])
-        return {'array': rec}
-
-@name_space1.route("/getsortDead")
-class getsortDead(Resource):
-    @name_space1.doc("")
-    # маршаллинг данных в соответствии с моделью minmax
-    @name_space1.marshal_with(sortsc)
-    def get(self):
-        """Получение сортировки по умершим"""
-        global ls
-        dea=sorted(ls,key=lambda sick: sick['dead'])
-        return {'array': dea}
-
-@name_space1.route("/getsortId")
+@name_space1.route("/getsortCode")
 class getsortId(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
@@ -110,8 +63,53 @@ class getsortId(Resource):
     def get(self):
         """Получение сортировки по id"""
         global ls
-        idi=sorted(ls,key=lambda sick: sick['id'])
-        return {'array': idi}
+        cod=sorted(ls,key=lambda sick: sick['code'])
+        return {'array': cod}
+    
+@name_space1.route("/getsortStore")
+class getsortStore(Resource):
+    @name_space1.doc("")
+    # маршаллинг данных в соответствии с моделью minmax
+    @name_space1.marshal_with(sortsc)
+    def get(self):
+        """Получение сортировки по названию магазина"""
+        global ls
+        str=sorted(ls,key=lambda sick: sick['store'])
+        return {'array': str}
+
+@name_space1.route("/getsortManufacturer")
+class getsortManufacturer(Resource):
+    @name_space1.doc("")
+    # маршаллинг данных в соответствии с моделью minmax
+    @name_space1.marshal_with(sortsc)
+    def get(self):
+        """Получение сортировки по производителям"""
+        global ls
+        man=sorted(ls,key=lambda sick: sick['manufacturer'])
+        return {'array': man}
+
+@name_space1.route("/getsortprice")
+class getsortPrice(Resource):
+    @name_space1.doc("")
+    # маршаллинг данных в соответствии с моделью minmax
+    @name_space1.marshal_with(sortsc)
+    def get(self):
+        """Получение сортировки по цене"""
+        global ls
+        prc=sorted(ls,key=lambda sick: sick['price'])
+        return {'array': prc}
+
+@name_space1.route("/getsortSuitability")
+class getsortSuitability(Resource):
+    @name_space1.doc("")
+    # маршаллинг данных в соответствии с моделью minmax
+    @name_space1.marshal_with(sortsc)
+    def get(self):
+        """Получение сортировки по времени до окончания срока годности"""
+        global ls
+        stb=sorted(ls,key=lambda sick: sick['suitability'])
+        return {'array': stb}
+
 oneval=api.model('one', {'val':fields.String}, required=True, description='one values')
 
 #MAX
@@ -182,55 +180,6 @@ class getminRecovered(Resource):
         global ls
         mn=min([sick['recovered'] for sick in ls ])
         return {'val': mn}
-
-#REMOVING MAXIMUM DEATH
-@name_space1.route("/deletemaxDead")
-class deletemaxDead(Resource):
-    @name_space1.doc("")
-    @name_space1.marshal_with(list_)
-    def get(self):
-        """Удаление страны с максимальным количеством умерших"""
-        global ls
-        mx=max([sick['dead'] for sick in ls ])
-        ls=[sick for sick in ls if sick['dead']!=mx]
-        return { 'array': ls}
-      
-#STATISTICS
-@name_space1.route("/changeStatistic")
-class changeStatistic(Resource):
-    @name_space1.doc("")
-    # ожидаем на входе данных в соответствии с моделью list_
-    @name_space1.expect(list_)
-    # маршалинг данных в соответствии с list_
-    @name_space1.marshal_with(list_)
-    def patch(self):
-        """Изменение статистики по заболеваниям"""
-        global ls
-        aver=sum([sick['recovered'] for sick in ls ])/len(ls)
-        for sick in ls:
-          if(sick["recovered"] >= aver):
-            temp=sick["recovered"]/100*10
-            sick["recovered"]=temp+sick["recovered"]
-        return { 'array': ls}
-    
-#CHANGE COUNTRY DATA
-@name_space1.route("/changedataCountry")
-class changedataCountry(Resource):
-    @name_space1.doc("")
-    # ожидаем на входе данных в соответствии с моделью list_
-    @name_space1.expect(list_)
-    # маршалинг данных в соответствии с list_
-    @name_space1.marshal_with(list_)
-    def put(self):
-        """Изменение данных по стране"""
-        global ls
-        for sick in ls:
-          if(api.payload['country'] == sick["country"]):
-            sick["id"] = api.payload['id']
-            sick["disease"] = api.payload['disease']
-            sick["recovered"] = api.payload['recovered']
-            sick["dead"] = api.payload['dead']
-        return { 'array': ls}
     
 api.add_namespace(name_space1)
 
