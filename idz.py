@@ -124,7 +124,7 @@ class getmaxSuitability(Resource):
         mx=max([sick['suitability'] for sick in ls ])
         return {'val': mx}
 
-@name_space1.route("/getmaxPrice)
+@name_space1.route("/getmaxPrice")
 class getmaxPrice(Resource):
     @name_space1.doc("")
     # маршаллинг данных в соответствии с моделью minmax
