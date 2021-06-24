@@ -11,7 +11,7 @@ INFO = [
 @api.route('/')
 class InfoList(Resource):
  @api.marshal_list_with(info)
-  def get(self):
+ def get(self):
   '''List all / это описание появится в браузере на экране напротив get'''
  return INFO
 # URL вида http://127.0.0.1:5000/part/1111 http://127.0.0.1:5000/part/2.
