@@ -224,5 +224,5 @@ class IzmfilClass(Resource):
         film={"id":api.payload['id'], "author": api.payload['author'], "name": api.payload['name'], "time": api.payload['time'], "score": api.payload['score'] } 
         ls.append(film)
         return ls
-app.run(debug=True)
+app.run(debug=True,host='127.0.0.1',port=5000)
     
