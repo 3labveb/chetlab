@@ -1,5 +1,5 @@
-from flask import Flask, Blueprint
 from flask_restplus import Api, Resource
+from flask import Flask, Blueprint
 app = Flask(__name__)
 api = Api(app = app)
 # описание главного блока нашего api http://127.0.0.1:5000/main/.
