@@ -11,6 +11,10 @@ class MainClass(Resource):
         return {"status": "Got new data"}
     def post(self):
         return {"status": "Posted new data"}
+    def patch(self):
+        return {"status": "Patched new data"}
+    def put(self):
+        return {"status": "Put new data"}  
 
 from flask_restplus import fields
 # определение модели данных массива
