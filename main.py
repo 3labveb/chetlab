@@ -167,7 +167,7 @@ class changeaverPrice(Resource):
     # маршалинг данных в соответствии с list_
     @name_space1.marshal_with(list_)
     def patch(self):
-        """Изменение статистики по заболеваниям"""
+        """Изменение цены товара цуна которого больше средней на 10 процентов"""
         global ls
         chaver=sum([sick['price'] for sick in ls ])/len(ls)
         for sick in ls:
