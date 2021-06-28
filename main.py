@@ -158,6 +158,23 @@ class getaverPrice(Resource):
         global ls
         aver=sum([sick['price'] for sick in ls ])/len(ls)
         return {'val': aver}
+      
+@name_space1.route("/changeaverPrice")
+class changeaverPrice(Resource):
+    @name_space1.doc("")
+    # ожидаем на входе данных в соответствии с моделью list_
+    @name_space1.expect(list_)
+    # маршалинг данных в соответствии с list_
+    @name_space1.marshal_with(list_)
+    def patch(self):
+        """Изменение статистики по заболеваниям"""
+        global ls
+        chaver=sum([sick['price'] for sick in ls ])/len(ls)
+        for sick in ls:
+          if(sick["price"] >= chaver):
+            temp=sick["rprice"]/100*10
+            sick["price"]=temp+sick["price"]
+        return { 'array': ls}      
 
 #MIN
 @name_space1.route("/getminSuitability")
