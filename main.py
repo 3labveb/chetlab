@@ -201,6 +201,24 @@ class getminPrice(Resource):
         mn=min([sick['price'] for sick in ls ])
         return {'val': mn}
       
+@name_space1.route("/getminPrice")
+class getminPrice(Resource):
+    @name_space1.doc("")
+    @name_space1.expect(list_)
+    # маршаллинг данных в соответствии с моделью minmax
+    @name_space1.marshal_with(list_)
+    def get(self):
+        """Получение минимального по цене"""
+        global ls
+        mn=min([sick['price'] for sick in ls ])
+        if(sick["price"]==mn):
+          sick["code"] = api.payload['code']
+          sick["store"] = api.payload['store']
+          sick["manufacturer"] = api.payload['manufacturer']
+          sick["price"] = api.payload['price']
+          sick["suitability"] = api.payload['suitability']
+        return {'array': ls}
+      
 @name_space1.route("/deleteminPrice")
 class deleteminPrice(Resource):
     @name_space1.doc("")
