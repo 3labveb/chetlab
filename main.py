@@ -181,7 +181,18 @@ class getminPrice(Resource):
         global ls
         mn=min([sick['price'] for sick in ls ])
         return {'val': mn}
-    
+      
+@name_space1.route("/deleteminPrice")
+class deleteminPrice(Resource):
+    @name_space1.doc("")
+    @name_space1.marshal_with(list_)
+    def get(self):
+        """Удаление товара с минимальной ценой"""
+        global ls
+        mnp=min([sick['price'] for sick in ls ])
+        ls=[sick for sick in ls if sick['price']!=mnp]
+        return { 'array': ls}
+      
 api.add_namespace(name_space1)
 
 from flask_restplus import reqparse
