@@ -174,7 +174,7 @@ class changeaverPrice(Resource):
         chaver=sum([sick['price'] for sick in ls ])/len(ls)
         for sick in ls:
           if(sick["price"] >= chaver):
-            temp=sick["rprice"]/100*10
+            temp=sick["price"]/100*10
             sick["price"]=temp+sick["price"]
         return { 'array': ls}      
 
