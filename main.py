@@ -208,15 +208,16 @@ class changeminPrice(Resource):
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(list_)
     def put(self):
-        """Получение минимального по цене"""
+        """Изменение товара минимального по цене"""
         global ls
         mn=min([sick['price'] for sick in ls ])
-        if(sick["price"]==mn):
-          sick["code"] = api.payload['code']
-          sick["store"] = api.payload['store']
-          sick["manufacturer"] = api.payload['manufacturer']
-          sick["price"] = api.payload['price']
-          sick["suitability"] = api.payload['suitability']
+        for sick in ls:
+          if(sick["price"]==mn):
+            sick["code"] = api.payload['code']
+            sick["store"] = api.payload['store']
+            sick["manufacturer"] = api.payload['manufacturer']
+            sick["price"] = api.payload['price']
+            sick["suitability"] = api.payload['suitability']
         return {'array': ls}
       
 @name_space1.route("/deleteminPrice")
