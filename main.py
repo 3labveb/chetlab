@@ -166,8 +166,6 @@ class getaverPrice(Resource):
 @name_space1.route("/changeaverPrice")
 class changeaverPrice(Resource):
     @name_space1.doc("")
-    # ожидаем на входе данных в соответствии с моделью list_
-    @name_space1.expect(list_)
     # маршалинг данных в соответствии с list_
     @name_space1.marshal_with(list_)
     def patch(self):
