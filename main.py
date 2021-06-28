@@ -201,13 +201,13 @@ class getminPrice(Resource):
         mn=min([sick['price'] for sick in ls ])
         return {'val': mn}
       
-@name_space1.route("/getminPrice")
-class getminPrice(Resource):
+@name_space1.route("/changeminPrice")
+class changeminPrice(Resource):
     @name_space1.doc("")
     @name_space1.expect(list_)
     # маршаллинг данных в соответствии с моделью minmax
     @name_space1.marshal_with(list_)
-    def get(self):
+    def put(self):
         """Получение минимального по цене"""
         global ls
         mn=min([sick['price'] for sick in ls ])
